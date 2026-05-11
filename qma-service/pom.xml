@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.quantitymeasurement</groupId>
-    <artifactId>quantity-measurement-backend</artifactId>
+    <artifactId>qma-service</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Quantity Measurement Backend</name>
-    <description>Enterprise-grade Quantity Measurement Application - Backend Monolith</description>
+    <name>QMA Service</name>
+    <description>Enterprise-grade Quantity Measurement Application - QMA Service</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

@@ -1,19 +1,18 @@
 package com.quantitymeasurement.enums;
 
 /**
- * UC4 - Extended Unit Support
+ * UC8 - Refactored LengthUnit as Standalone Enum
  *
  * <p>
- * Enum representing length units with their conversion factors to a
- * common base unit (inches). Extended to support YARD and CENTIMETER.
- * Demonstrates enum extensibility, mathematical accuracy, DRY principle,
- * validation, and backward compatibility.
+ * Implements the {@link Unit} interface. Conversion logic is fully
+ * encapsulated within this enum, following SRP and the delegation pattern.
+ * Supports FEET, INCH, YARD, and CENTIMETER.
  * </p>
  *
  * @author Nivrutti
- * @version 2.0.0
+ * @version 3.0.0
  */
-public enum LengthUnit {
+public enum LengthUnit implements Unit {
 
     /** Feet unit: 1 foot = 12 inches */
     FEET(12.0),
@@ -30,20 +29,14 @@ public enum LengthUnit {
     /** Conversion factor to base unit (inches) */
     private final double conversionFactor;
 
-    /**
-     * Constructs a LengthUnit with the given conversion factor.
-     *
-     * @param conversionFactor multiplier to convert this unit to inches
-     */
     LengthUnit(double conversionFactor) {
         this.conversionFactor = conversionFactor;
     }
 
     /**
-     * Returns the conversion factor to the base unit (inches).
-     *
-     * @return conversion factor
+     * {@inheritDoc}
      */
+    @Override
     public double getConversionFactor() {
         return conversionFactor;
     }

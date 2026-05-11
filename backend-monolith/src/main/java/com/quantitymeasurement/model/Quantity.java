@@ -5,22 +5,22 @@ import com.quantitymeasurement.enums.LengthUnit;
 import java.util.Objects;
 
 /**
- * UC3 - Generic Quantity Class
+ * UC5 - Unit-to-Unit Conversion
  *
  * <p>
- * A generic, reusable quantity class that applies the DRY principle by
- * replacing separate Feet and Inches classes with a single abstraction.
- * Uses {@link LengthUnit} enum to represent the unit type and normalizes
- * all values to a base unit (inches) for comparison.
+ * Immutable value object representing a physical quantity with a numeric
+ * value and a unit. Supports conversion between any two compatible units
+ * via a shared base unit (inches). Implements value object semantics:
+ * immutability, equals/hashCode contract, and meaningful toString.
  * </p>
  *
  * <p>
- * Demonstrates: DRY, polymorphism, enum usage, abstraction,
- * equals override, SRP, and refactoring best practices.
+ * Demonstrates: conversion factors, immutability, JavaDocs,
+ * private methods, method overriding, and method overloading.
  * </p>
  *
  * @author Nivrutti
- * @version 1.0.0
+ * @version 3.0.0
  */
 public class Quantity {
 
@@ -45,8 +45,8 @@ public class Quantity {
         if (value < 0) {
             throw new IllegalArgumentException("Quantity value cannot be negative: " + value);
         }
-        this.value = Objects.requireNonNull(unit, "Unit must not be null") != null ? value : value;
         this.unit = Objects.requireNonNull(unit, "Unit must not be null");
+        this.value = value;
     }
 
     /**
@@ -77,15 +77,41 @@ public class Quantity {
     }
 
     /**
-     * Checks equality by comparing base-unit values within epsilon tolerance.
+     * Converts this quantity to the specified target unit.
      *
      * <p>
-     * Two quantities are equal if they represent the same physical length,
-     * regardless of the unit used to express them.
+     * Conversion is performed via the base unit:
+     * {@code result = (value * sourceConversionFactor) / targetConversionFactor}
      * </p>
      *
+     * @param targetUnit the unit to convert to (must not be null)
+     * @return a new Quantity representing the same physical length in the target
+     *         unit
+     * @throws NullPointerException if targetUnit is null
+     */
+    public Quantity convertTo(LengthUnit targetUnit) {
+        Objects.requireNonNull(targetUnit, "Target unit must not be null");
+        double baseValue = toBaseUnit();
+        double convertedValue = baseValue / targetUnit.getConversionFactor();
+        return new Quantity(convertedValue, targetUnit);
+    }
+
+    /**
+     * Converts this quantity to the specified target unit and returns the numeric
+     * value.
+     *
+     * @param targetUnit the unit to convert to
+     * @return the numeric value in the target unit
+     */
+    public double getValueIn(LengthUnit targetUnit) {
+        return convertTo(targetUnit).getValue();
+    }
+
+    /**
+     * Checks equality by comparing base-unit values within epsilon tolerance.
+     *
      * @param obj the object to compare with
-     * @return {@code true} if both quantities represent the same length
+     * @return {@code true} if both quantities represent the same physical length
      */
     @Override
     public boolean equals(Object obj) {
